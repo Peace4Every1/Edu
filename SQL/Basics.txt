@@ -1,0 +1,21 @@
+  !SQL is NOT case-sensitive, though "KEY_WORD other_stuff" is a widespread syntax.
+  !Separate statements from each other with ";"
+
+DBs contain several objects:
+1.Tables - store data
+2.Views - can combine data from multiple tables and show them. Used for reports, etc.
+3.Stored procedures - little functions for querying data
+4.Functions - little functions for querying data
+
+Records - are rows in the table.
+
+- Line with "--" in the beginnning is considered a comment
+!- Order of the clauses and statements is important. Otherwise we get Syntax Error.
+
+- Every table in MYSQL has a key column.
+
+      
+      ALIAS
+
+- Aside of using the word ALIAS when trying to create one, we can use a shorter syntax for table names. We can abbreviate tables by writing their 1st letter after its full name.
+!- After giving alias to a table, we MUST use that. Using the original name will result in an error.

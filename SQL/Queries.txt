@@ -1,0 +1,140 @@
+Writing a GET query, SELECT clause:
+1. Select a DB to execute a query against it. - USE db_name
+2. Use select statement for retrieving data. - SELECT column_name, second_column (alternative is using *, which means "all columns")
+3. Specify the table to make a query from. - FROM table_name
+  Ex: SELECT * FROM customers
+
+Writing a filtering query, WHERE clause, then sorting with ORDER_BY:
+Ex: SELECT * FROM customers WHERE customer_id = 1 ORDER BY first_name
+
+
+    SELECT Clause:
+
+- We can execute math expressions against db values.
+Ex:
+  SELECT last_name, first_name, points * 20 + 300
+
+- Retrieve unique lists with query with DISTINCT.
+Ex: 
+  SELECT DISTINCT state FROM customers
+
+    AS:
+
+- We can assign aliases to different columns:
+Ex:
+  SELECT last_name, first_name, points * 20 + 300 AS discount_factor (or) 'discount factor'
+
+
+
+    WHERE Clause:
+
+- We use this for filtering data.
+Ex:
+  SELECT * FROM Customers WHERE state = 'VA'
+
+-Operator list: >, <, >=, <=, =, != or <>
+
+!- SQL can treat dates in string format like numbers. Default date format is YYYY-MM-DD
+Ex:
+  SELECT * FROM Customers WHERE birth_date > '1990-01-01'
+
+  SELECT * FROM orders WHERE placement_date >= '2020-01-01'
+
+
+
+    AND, OR, NOT operators:
+
+- With these operators we are able to use multiple conditions at the same time.
+Ex:
+  SELECT * FROM Customers WHERE birth_date > '1990-01-01' AND points > 1000
+  SELECT * FROM Customers WHERE birth_date > '1990-01-01' OR points > 1000 AND state = 'VA'
+  SELECT * FROM Customers WHERE NOT (birth_date <= '1990-01-01' AND points > 1000)
+
+- Order of operators, without overriding them with (). AND - 1, OR - 2
+
+SELECT * FROM order_items WHERE order_id = 6 AND quantity * unit_price > 30
+
+
+    IN operator:
+
+Instead of writing something like this -
+  SELECT * FROM Customers WHERE state = 'VA' OR state = 'GA' OR state = 'FL'
+We can use the IN operator.
+Ex:
+  SELECT * FROM Customers WHERE state IN ('VA', 'FL', 'GA')
+  
+- IN operator is made for comparing an attribute with a list of different values. !The values get treated like with OR operator.
+
+
+    BETWEEN operator:
+
+Instead of writing -
+  SELECT * FROM customers WHERE points >= 1000 AND points <= 3000
+We can use BETWEEN operator.
+Ex:
+  SELECT * FROM customers WHERE points BETWEEN 1000 AND 3000
+
+- BETWEEN operator is used when comparing values
+
+
+    LIKE operator:
+
+- LIKE gets used when we need to match a pattern.
+!- LIKE is NOT case-sensitive.
+- % means any amount of any letters, equivalent of * in common search systems.
+- _ means a single character, equiv. to ? in common search systems.
+Ex:
+  SELECT * FROM customers WHERE last_name LIKE 'a____b%'
+
+  SELECT * FROM customers WHERE address LIKE '%TRAIL%' OR address LIKE '%AVENUE%'
+  SELECT * FROM customers WHERE phone_number LIKE %9
+
+
+    REGEXP operator:
+
+- The same as in every other programming language.
+Ex:
+  SELECT * FROM customers WHERE last_name REGEXP '[a-h]e'
+
+- REG operators are:
+^ - beginning
+$ - end
+| - logical or
+[abcd] - before or after a char to make the items before it limited by the array elements
+[a-f]
+
+
+    IS NULL operator:
+
+- With this operator we can find out if the value is null.
+Ex:
+  SELECT * FROM customers WHERE phone IS NULL
+
+- We can also use NOT with IS NULL
+EX:
+  SELECT * FROM customers WHERE phone IS NOT NULL
+
+
+    ORDER BY operator:
+
+- It is meant for sorting the query results. (ASC default.)
+- When needed to get results in descending order, write DESC after order by's argument.
+- We can order columns enumerating, by writing the columns with ","
+Ex:
+  SELECT * FROM Customers ORDER BY Country, City
+  
+- ORDER BY 1,2 executes sorting by column positions, which is a BAD PRACTICE
+Ex:
+  SELECT * FROM customers ORDER BY first_name DESC
+Results here are sorted by their first_names in descending order and not by their !table keys
+
+
+    LIMIT clause:
+
+- For limiting the results for executing a query
+Ex:
+  SELECT * FROM customers LIMIT 300
+
+- For skipping some results we can pass them as first arguments to LIMIT
+Ex:
+  SELECT * FROM customers LIMIT 6,3

@@ -1,0 +1,130 @@
+  !The mechanism that we use when trying to get information from multiple tables.
+
+There are 2 types of JOINs in SQL: INNER and OUTER.
+- The keyword INNER is optional.
+!- The columns in joinable tables must be UNIQUE.
+
+
+
+      INNER JOIN:
+      ON keyword:
+
+!- INNER JOIN Returns rows when there is a match in both tables.
+
+- We use this to specify the basis of join.
+Ex:
+  SELECT order_id, first_name, last_name, orders.customer_id FROM orders JOIN customers ON orders.customer_id = customers.customer_id
+
+- In cases when the name of the requestable column is not unique, we must specify which table we want it from, by saying [table_name.column_name]
+
+
+      JOINing across DBs:
+
+- When trying to get access to a table from another db, we must specify its name in the query.
+Ex:
+  SELECT * FROM order_items oi JOIN sql_inventory.products p ON oi.product_id = p.product_id
+
+!- You have to prefix with db names only the tables that are not in your current db (the one written in the top of the query: "USE [sql_inventory]"). If not prefixed the query will be executed on the current db.
+
+
+      SELF JOINs (Unary relationship):
+
+- The only difference with joining with another tables is that we have to use another aliases and use prefixes when retrieving data
+This example returns the employees, mana
+Ex:
+  SELECT e.employee_id, e.first_name, m.first_name AS manager FROM employees e JOIN employees m ON e.reports_to = m.employee_id
+
+
+      Multiple JOINs:
+
+- Nothing different, just multiple JOIN keywords.
+Ex:
+  SELECT o.order_id, o.order_date, c.first_name, c.last_name, os.name AS status FROM orders o JOIN customers c ON o.customer_id = c.customer_id JOIN order_statuses os ON os.order_status_id = o.status
+
+
+      Compound JOIN condition:
+
+- We can JOIN 2 tables based on multiple columns using AND.
+Ex:
+  SELECT * FROM order_items oi JOIN order_item_notes oin ON oi.order_id = oin.order_id AND oi.product_id = oin.product_id
+
+
+      Implicit JOIN syntax:
+
+- Another syntax for JOINing 2 tables.
+!- Never forget about the WHERE clause when using this, otherwise SQL will execute Cross joins.
+
+Ex:
+  SELECT * FROM orders o JOIN customers c ON o.customer_id = c.customer_id
+
+  --Implicit JOIN syntax
+  SELECT * FROM orders o, customers c WHERE o.customer_id = c.customer_id
+
+
+
+
+                          OUTER JOINS:
+                      LEFT and RIGHT JOINS:
+
+- There are 2 types of OUTER JOINs in SQL: LEFT and RIGHT.
+  +LEFT JOIN returns all rows from the left table, even if there are no matches in the right table.
+  +RIGHT JOIN returns all rows from the right table, even if there are no matches in the left table.
+
+
+      OUTER JOIN between multiple tables:
+
+- We can use both INNER and OUTER JOINs together, in case of some columns match and some do not.
+Ex:
+  SELECT o.order_date, o.order_id, c.first_name AS customer, s.name AS shipper, o.status AS status
+  FROM orders o
+  JOIN customers c
+    ON o.customer_id = c.customer_id
+  LEFT JOIN shippers s
+    ON o.shipper_id = s.shipper_id
+  JOIN order_statuses os
+    ON o.status = os.order_status_id
+
+
+      SELF OUTER JOINs:
+
+- Used when we need fields, values of which can be "null".
+Ex:
+  SELECT
+    e.employee_id,
+    e.first_name,
+    m.first_name AS manager
+  FROM employees e
+  LEFT JOIN employees m
+    ON e.reports_to = m.employee_id
+
+
+      USING Clause:
+
+- If the column name is exactly the same when joining, we can use USING.
+Ex:
+  SELECT o.order_id, c.first_name, sh.name AS shipper
+  FROM orders o
+  JOIN customers c
+    USING (customer_id)
+  LEFT JOIN shippers sh
+    USING (shipper_id)
+
+- If joining on multiple columns, we can pass them as multiple arguments.
+Ex:
+  USING(order_id, product_id)
+
+
+      Natural JOINs:
+
+- This query will output the common name columns.
+Ex:
+  SELECT * FROM orders o NATURAL JOIN customers c
+
+
+      CROSS JOINs:
+
+- Result of this is number of rows in the first table * number of the rows in the second table, if now WHERE is used along with CROSS JOIN.
+Ex:
+  SELECT c.first_name AS customer, p.name AS product FROM customers c CROSS JOIN products p ORDER BY c.first_name
+
+- Implicit syntax: SELECT c.first_name AS customer, p.name AS product FROM customers c, products p ORDER BY c.first_name
