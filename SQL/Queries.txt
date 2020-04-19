@@ -138,3 +138,40 @@ Ex:
 - For skipping some results we can pass them as first arguments to LIMIT
 Ex:
   SELECT * FROM customers LIMIT 6,3
+
+
+    GROUP BY clause:
+
+We use this when we need to group data by 1 or more columns.
+Ex:
+  SELECT
+    client_id,
+    state,
+    city,
+    SUM(invoice_total) AS total_sales
+  FROM invoices i
+  JOIN clients USING (client_id)
+  GROUP BY state, city
+
+  SELECT
+    date,
+    SUM(amount) AS total_payments
+  FROM payments p
+  JOIN payment_methods pm
+    ON p.payment_method = pm.payment_method_id
+  GROUP BY date
+  ORDER BY date
+
+    Adding custom columns:
+
+You can add a custom column name to queried col names by adding a string.
+Ex:
+  SELECT customer_id, first_name, points, 'Bronze' AS type FROM customers WHERE points < 2000
+
+
+
+        SUBQUERY:
+
+We can use some queries as a part of another bigger query.
+Ex:
+  INSERT INTO orders_archived SELECT * FROM orders WHERE order_date < '2019-01-01'

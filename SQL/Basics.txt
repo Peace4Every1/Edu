@@ -19,3 +19,9 @@ Records - are rows in the table.
 
 - Aside of using the word ALIAS when trying to create one, we can use a shorter syntax for table names. We can abbreviate tables by writing their 1st letter after its full name.
 !- After giving alias to a table, we MUST use that. Using the original name will result in an error.
+
+
+    Column Attributes:
+
+- Each column has its attributes, for example Datatype may have INT([number about length]), VARCHAR, DATE, etc.
+- Some column names: PK - primary key, NN - not null, AI - auto increment, Default / Expression - if no default is provided, it will use null or '0' for INTs.

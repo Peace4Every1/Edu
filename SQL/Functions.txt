@@ -1,0 +1,31 @@
+MySQL functions:
+
+LAST_INSERT_ID() - gets the id of the newly inserted record, usually gets written after the INSERT statement.
+
+
+    Aggregate functions:
+
+Those are the functions that combine several values into a single result.
+MAX, MIN, AVG, SUM, COUNT() - examples.
+* - means all
+- COUNT by default will count also repeating values, to make it count only unique fields, we must use DISTINCT.
+
+Ex:
+  SELECT MAX(invoice_total) AS highest,
+    MIN(invoice_total) AS lowest,
+    AVG(invoice_total) AS average,
+    SUM(invoice_total) AS total,
+    COUNT(invoice_total) AS number_of_invoices,
+    COUNT(payment_date) AS count_of_payments,
+    COUNT(DISTINCT client_id) AS total_records,
+    COUNT(*) AS total_rec
+  FROM invoices
+  WHERE invoice_date > '2019-07-01'
+
+  SELECT 'First half of 2019' AS data_range,
+	  SUM(invoice_total) AS total_sales,
+    SUM(payment_total) AS total_payments,
+    SUM(invoice_total - payment_total) AS what_we_expect
+  FROM invoices
+  WHERE invoice_date
+	BETWEEN '2019-01-01' AND '2019-06-30'

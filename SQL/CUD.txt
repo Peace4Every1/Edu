@@ -1,0 +1,93 @@
+            Create, Update, Delete tables or their data.
+
+
+    INSERT a row:
+
+- Write table name after key words "INSERT INTO".
+- Check CA for table, for knowing what values to fill in the specific table.
+- NN in CA means, that the value must always exist, thus if writing DEFAULT for that field, MySQL will auto-ly fill the field with NULL.
+- AI in CA means, that a unique value will be auto-ly generated.
+
+- In 2nd example we don't need the DEFAULT key words, it will save the values by order.
+Ex:
+  INSERT INTO customers ()
+  VALUES (DEFAULT, 'John', 'Smith', NULL, DEFAULT, 'city', 'CA')
+
+  INSERT INTO customers (first_name, last_name, birth_date, address, city, state)
+  VALUES ('John', 'Smith', NULL, DEFAULT, 'city', 'CA')
+
+
+    INSERT multiple rows:
+
+We can do it, just by seperating them by comma
+Ex:
+  INSERT INTO shippers (name)
+  VALUES ('Shipper1'), ('Shipper2'), ('Shipper3'),
+
+  INSERT INTO products (name, quantity_in_stock, unit_price)
+  VALUES ('FirstProd', 10. 1.9), ('SecondProd', 10. 1.9), ('ThirdProd', 10. 1.9)
+
+
+    INSERT Hierarchical Rows:
+
+By using MySQL function LAST_INSERT_ID() we can get data about recently added row and create a new row in an another table BASED on that one.
+Ex:
+  INSERT into orders (customer_id, order_date, status)
+  VALUES (1, '2019-01-02', 1);
+
+  INSERT INTO order_items 
+  VALUES (LAST_INSERT_ID(), 1, 1, 3.94), (LAST_INSERT_ID(), 2, 1, 4.44);
+
+
+    Create copy of a table:
+
+You can do that by using another query as a SUBQUERY.
+Ex:
+  CREATE TABLE orders_archived AS SELECT * FROM ORDERS
+
+
+    UPDATE a single row:
+
+- We use keyword SET for setting values for columns.
+Ex:
+  UPDATE invoices SET payment_total = invoice_total * 0.9, payment_date = '2019-03-01'
+  WHERE invoice_id = 1
+
+
+    UPDATE multiple rows:
+
+The syntax is absolutely the same.
+- We can also use the IN operator. (values in parentheses compare by OR)
+Ex:
+  UPDATE invoices
+  SET
+    payment_total = invoice_total * 0.5,
+    payment_date = due_date
+  WHERE client_id IN (3,4)
+
+
+    UPDATE with SUBQUERY:
+
+Same as before, IN operator can also be used.
+Ex:
+  UPDATE invoices
+  SET
+    payment_total = invoice_total * 0.5,
+    payment_date = due_date
+  WHERE client_id = (SELECT client_id FROM clients WHERE name = 'Myworks')
+
+
+    DELETE Rows:
+
+- If no WHERE is written, all records from the table will be deleted. Be very careful!
+Ex:
+  DELETE FROM invoices WHERE invoice_id = 1
+
+
+
+
+
+
+
+
+*CA - Column Attributes
