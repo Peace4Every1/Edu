@@ -65,6 +65,14 @@ Ex:
   
 - IN operator is made for comparing an attribute with a list of different values. !The values get treated like with OR operator.
 
+Subquery with IN:
+Ex:
+  SELECT *
+  FROM products
+  WHERE product_id NOT IN (
+    SELECT DISTINCT product_id
+    FROM order_items
+  )
 
     BETWEEN operator:
 
@@ -142,6 +150,7 @@ Ex:
 
     GROUP BY clause:
 
+- This clause must always be after FROM and WHERE.
 We use this when we need to group data by 1 or more columns.
 Ex:
   SELECT
@@ -169,9 +178,64 @@ Ex:
   SELECT customer_id, first_name, points, 'Bronze' AS type FROM customers WHERE points < 2000
 
 
+    HAVING clause:
+
+- We use this clause to filter data !after GROUP BY clause, because syntactically, it's impossible to use WHERE before GROUP BY, as the arguments of WHERE are unknown yet.
+- Syntax is the same as WHERE's
+Differences:
+  - Unlike WHERE clause, we CAN NOT reference columns, that are not included in our SELECT, when WHERE can use any column names, despite them being included.
+
+Ex:
+  SELECT
+    client_id,
+    SUM(invoice_total) AS total_sales,
+    COUNT(*) AS number_of_invoices
+  FROM invoices
+  WHERE
+  GROUP BY client_id
+  HAVING total_sales > 500 AND number_of_invoices > 5
+
+
+    WITH ROLLUP operator:
+
+- !NOT part of regular SQL, works in MYSQL, in other DBs, not guaranteed.  
+- Operator for summarizing data, that applies only to the rows that aggregate values.
+- In case we group by multiple columns, it will summarize both the results of each row, as well as all the rows alltogether.
+Ex:
+  SELECT
+    state,
+    city
+    SUM(invoice_total) AS total_sales
+  FROM invoices i
+  JOIN clients c USING (client_id)
+  GROUP BY state, city WITH ROLLUP
+
+
+
+
+
+
+
+
 
         SUBQUERY:
 
-We can use some queries as a part of another bigger query.
-Ex:
+- We can use some queries as a part of another bigger query.
+Exs:
   INSERT INTO orders_archived SELECT * FROM orders WHERE order_date < '2019-01-01'
+
+  SELECT *
+  FROM products
+  WHERE unit_price > (
+    SELECT unit_price
+    FROM products
+    WHERE product_id = 3
+  )
+
+  USE sql_hr;
+  SELECT *
+  FROM employees
+  WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+  )

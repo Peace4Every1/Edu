@@ -9,6 +9,7 @@ Those are the functions that combine several values into a single result.
 MAX, MIN, AVG, SUM, COUNT() - examples.
 * - means all
 - COUNT by default will count also repeating values, to make it count only unique fields, we must use DISTINCT.
+- Those functions work only on non-null values, regular queries will not count them. If a query is needed, that returns everything, despite value being null, we can use "COUNT (*) AS total_records"
 
 Ex:
   SELECT MAX(invoice_total) AS highest,
