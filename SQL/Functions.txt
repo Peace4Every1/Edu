@@ -3,6 +3,62 @@ MySQL functions:
 LAST_INSERT_ID() - gets the id of the newly inserted record, usually gets written after the INSERT statement.
 
 
+    Numeric functions:
+
+- Some functions are ROUND(), TRUNCATE(), CEILING(), FLOOR(), ABS(), RAND()
+  + ROUND has an optional second parameter, which specifies how many digits must be rounded
+    Ex: SELECT ROUNT(5.7345, 2)  //5.73
+  + TRUNCATE slices the number from 0 to requested index
+  + CEILING rounds up
+  + FLOOR rounds down
+  + ABS absolute
+  + RAND generates a random value 0 < rnd < 1
+
+
+    String functions:
+
+- Some are LENGTH(), UPPER(), LOWER(), LTRIM(), RTRIM(), TRIM(), LEFT(), RIGHT(), SUBSTRING(), LOCATE(), REPLACE(), CONCAT()
+  + LTRIM trims from the left
+  + RTRIM trims from the right
+  + TRIM just trims
+  + LEFT('text', [num_to_be_sliced])
+  + RIGHT('text', [num_to_be_sliced])
+  + SUBSTRING('text', [start_index], [end_index])
+  + LOCATE(['text_to_be_found'], 'text_to_be_searched_in') returns 0 if nothing found, is not case-sensitive, if multiple characters are searched, returns the location of beginning of it
+  + REPLACE(['text'], ['to_be_changed'], ['to_be_changed_to'])
+  + CONCAT(...args to concat)
+  Ex: SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM customers
+
+
+    Date functions:
+
+- Some are NOW(), CURDATE(), CURTIME(), YEAR(), MONTH(), DAY(), HOUR(), MINUTE(), SECOND(), DAYNAME(), MONTHNAME(), EXTRACT()
+  + NOW returns current date
+  + CURDATE cur. date without time
+  + CURTIME cur. time without date
+  + YEAR(NOW()), MONTH, and the rest take a date obj. as an argument and return integer
+  + DAYNAME(NOW()) and MONTHNAME return strings
+  + EXTRACT can be used with anything from above to get a specific element from it. Ex: SELECT EXTRACT(YEAR FROM NOW()) //returns 2020
+
+
+    Formatting date/time functions:
+
+- Some are DATE_FORMAT(), TIME_FORMAT()
+  + DATE_FORMAT(NOW(), '%m', '%y') the arguments starting from 2 represent what is expected, lowercase = 2 digit, uppercase = full data.
+  + TIME_FORMAT
+  Ex: SELECT TIME_FORMAT(NOW(), '%H:%i %p) // 8:20 PM
+
+
+    Calculate date/time functions:
+
+- Some are DATE_ADD(), DATE_SUB(), DATEDIFF(), TIME_TO_SEC('09:00')
+  + DATE_ADD adds the specified amount to the specified parameter
+    Ex: SELECT DATE_ADD(NOW(), INTERVAL -1 YEAR)
+  + DATE_SUB subtracts with the same logic as adding
+  + DATEDIFF('2019-01-05 09:00', '2019-01-01 17:00') calculates the difference between 2 dates
+  + TIME_TO_SEC('09:00') returns the time since midnight to the specified time, can also be used in combination with itself.
+    Ex: SELECT TIME_TO_SEC('09:00') - TIME_TO_SEC('09:02') // -120 because of the order of the operands
+
     Aggregate functions:
 
 Those are the functions that combine several values into a single result.

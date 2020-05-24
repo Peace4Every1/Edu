@@ -25,6 +25,32 @@ Ex:
   SELECT last_name, first_name, points * 20 + 300 AS discount_factor (or) 'discount factor'
 
 
+      SUBQUERY:
+Ex:
+  SELECT
+    invoice_id,
+    invoice_total,
+    (SELECT AVG(invoice_total)
+      FROM invoices) AS invoice_average,
+    invoice_total - (SELECT invoice_average)
+  FROM invoices
+
+
+      FROM clause subqueries:
+- We can treat table generated from subqueries lika a real table for filtering data or calling functions on it, just be referencing it instead of a real existing table.
+- It is required to give that table an alias!
+
+Ex:
+  SELECT *
+  FROM (
+    SELECT
+      invoice_id,
+      invoice_total,
+      (SELECT AVG(invoice_total)
+        FROM invoices) AS invoice_average,
+      invoice_total - (SELECT invoice_average)
+    FROM invoices
+  ) as sales_summary
 
     WHERE Clause:
 
